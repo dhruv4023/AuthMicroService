@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Define the user schema for MongoDB
 const userSchema = mongoose.Schema(
   {
     firstName: {
@@ -19,14 +20,14 @@ const userSchema = mongoose.Schema(
       require: true,
       min: 2,
       max: 50,
-      unique: true,
+      unique: true, // Ensure usernames are unique
     },
     about: { type: String },
     email: {
       type: String,
       require: true,
       min: 2,
-      unique: true,
+      unique: true, // Ensure email addresses are unique
     },
     password: {
       type: String,
@@ -36,15 +37,17 @@ const userSchema = mongoose.Schema(
     },
     picPath: {
       type: String,
-      default: "",
+      default: "", // Default profile picture path
     },
     location: {
       state: { type: String },
       city: { type: String },
       pincode: { type: String },
     },
-    impressions: { type: Number, default: 0 },
+    impressions: { type: Number, default: 0 }, // Default impression count
   },
-  { timestamps: true }
+  { timestamps: true } // Add timestamps for createdAt and updatedAt
 );
+
+// Export the user schema as a Mongoose model named "Users"
 export default mongoose.model("Users", userSchema);
