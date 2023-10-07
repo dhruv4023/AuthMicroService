@@ -15,16 +15,16 @@ export const sendMail = async (req, res) => {
       },
     });
 
-    // // Define email options
-    // const mailOptions = {
-    //   from: "abzxy50312@gmail.com",
-    //   to:email,
-    //   subject:subject,
-    //   text:text,
-    // };
+    // Define email options
+    const mailOptions = {
+      from: "abzxy50312@gmail.com",
+      to:email,
+      subject:subject,
+      text:text,
+    };
 
-    // // Send the email
-    // await transporter.sendMail(mailOptions);
+    // Send the email
+    await transporter.sendMail(mailOptions);
 
     res.send("Email sent successfully");
   } catch (error) {

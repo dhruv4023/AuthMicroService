@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import Users from "../models/Users.js";
+import generateJWTToken from "../middleware/generateToken.js";
 import { deleteFile, renameAndMove } from "../helper/fileDirOperations.js";
 /*REGISTER USER*/
 export const registerControl = async (req, res) => {
@@ -74,7 +74,7 @@ export const loginControl = async (req, res) => {
       return res
         .status(400)
         .json({ exist: false, mess: "Invalid credintials" });
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRECT);
+    const token = generateJWTToken(user, process.env.JWT_SECRECT);
     delete user.password;
 
     res.status(200).json({ exist: true, token, user });
