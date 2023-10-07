@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 export const sendMail = async (req, res) => {
   try {
     const { email, otp } = req.body;
-    console.log(email,otp)
+    // console.log(email,otp)
     const subject = "OTP for Login " + otp;
     const text="Thank you for sign up."
     // Create a Nodemailer transporter
