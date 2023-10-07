@@ -5,13 +5,8 @@ This is an authentication micro service built using Node.js that provides authen
 ## Table of Contents
 
 - [Introduction](#introduction)
-- [Technologies](#technologies)
 - [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [API Routes](#api-routes)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Introduction
 
