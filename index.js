@@ -6,40 +6,50 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+
+// Load environment variables from a .env file
 dotenv.config();
 
-// routes
-import userRoute from "./routes/userRoutes.js";
-import authRoute from "./routes/authRoutes.js";
-import mailRoute from "./routes/mail.js";
-// configuration
+// Create an Express application
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
-app.use(express.json());
-app.use(helmet());
-app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
-app.use(morgan("common"));
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors({ origin: JSON.parse(process.env.ORIGIN_URL_List) }));
-app.use("/", express.static(path.join(__dirname, "public")));
 
+// Middleware setup
+app.use(express.json()); // Parse JSON request bodies
+app.use(helmet()); // Enhance security by setting various HTTP headers
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" })); // Configure CORS policy
+app.use(morgan("common")); // Log HTTP requests
+app.use(bodyParser.json({ limit: "30mb", extended: true })); // Parse JSON requests with size limit
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true })); // Parse URL-encoded requests with size limit
+app.use(cors({ origin: JSON.parse(process.env.ORIGIN_URL_List) })); // Configure CORS for allowed origins
+app.use("/", express.static(path.join(__dirname, "public"))); // Serve static files from the "public" directory
+
+// Root route that returns a simple "Server is running..." message
 app.get("/", (req, res) => {
   res.send("Server is running...");
 });
-app.use("/auth", authRoute);
-app.use("/user", userRoute);
-app.use("/mail", mailRoute);
 
+// Define routes for authentication, user, and mail functionality
+import userRoute from "./routes/userRoutes.js";
+import authRoute from "./routes/authRoutes.js";
+import mailRoute from "./routes/mail.js";
+
+app.use("/auth", authRoute); // Use the authentication route
+app.use("/user", userRoute); // Use the user route
+app.use("/mail", mailRoute); // Use the mail route
+
+// Start the server and listen on the specified port
 app.listen(process.env.PORT, () => {
   console.log("Server is running on PORT:", process.env.PORT);
 });
 
 /* ----------------------------MONGODB CONNECTION------------------- */
+
 import mongoose from "mongoose";
 mongoose.set("strictQuery", true);
 
+// Connect to MongoDB using the provided DB_URL
 mongoose
   .connect(process.env.DB_URL, {
     useNewUrlParser: true,

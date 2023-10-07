@@ -5,7 +5,7 @@ export const sendMail = async (req, res) => {
     const { email, otp } = req.body;
     // console.log(email,otp)
     const subject = "OTP for Login " + otp;
-    const text="Thank you for sign up."
+    const text = "Thank you for sign up.";
     // Create a Nodemailer transporter
     const transporter = nodemailer.createTransport({
       service: "Gmail",
@@ -18,9 +18,9 @@ export const sendMail = async (req, res) => {
     // Define email options
     const mailOptions = {
       from: "abzxy50312@gmail.com",
-      to:email,
-      subject:subject,
-      text:text,
+      to: email,
+      subject: subject,
+      text: text,
     };
 
     // Send the email
