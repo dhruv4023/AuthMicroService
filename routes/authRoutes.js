@@ -7,8 +7,8 @@ import {
   getUserNames,
   updateRegisteredData,
 } from "../controller/auth.js";
-import upload from "../helper/fileUploder.js";
 import { verifyToken } from "../middleware/auth.js";
+import upload from "../middleware/fileUploder.js";
 
 // Create a new Express Router
 const routes = express.Router();

@@ -1,5 +1,4 @@
 import nodemailer from "nodemailer";
-
 // Controller function to send an OTP (One-Time Password) email
 export const sendMail = async (req, res) => {
   try {
@@ -27,8 +26,8 @@ export const sendMail = async (req, res) => {
     };
 
     // Send the email using the Nodemailer transporter
-    await transporter.sendMail(mailOptions);
-
+    // await transporter.sendMail(mailOptions);
+    console.log(otp)
     // Send a success response if the email is sent successfully
     res.send("Email sent successfully");
   } catch (error) {

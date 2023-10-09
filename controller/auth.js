@@ -1,15 +1,16 @@
 import bcrypt from "bcrypt";
 import Users from "../models/Users.js"; // Import the Users model
 import generateJWTToken from "../middleware/generateToken.js"; // Import JWT token generator
-import { deleteFile, renameAndMove } from "../helper/fileDirOperations.js"; // Import file and directory operations
+import { uploadFile } from "../helper/uploadFileToCloudnary.js";
 
 /* REGISTER USER */
 export const registerControl = async (req, res) => {
   const _file = req.file; // Get the uploaded file, if any
   try {
+    // console.log(_file)
     const { firstName, lastName, username, email, password, friends, about } =
       req.body; // Extract user registration data
-
+    // console.log(req.body);
     // Extract and structure user location data
     const location = {
       state: req.body["location.state"],
@@ -21,13 +22,22 @@ export const registerControl = async (req, res) => {
     // Check if a user with the same email already exists
     const user = await Users.findOne({ email: email });
     if (user) {
-      _file && deleteFile(_file.path); // Delete the uploaded file
       return res.status(400).json({ msg: "User already exists!" });
     }
 
     // Generate a salt and hash the user's password
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
+
+    const dirAddress = "Users/" + username;
+    const newImgFileName = "profileImg";
+    // upload image to cloudnary
+    if (_file)
+      await uploadFile({
+        file: _file,
+        newImgFileName: newImgFileName,
+        dirAddress: dirAddress,
+      });
 
     // Create a new User document
     const newUser = new Users({
@@ -36,27 +46,19 @@ export const registerControl = async (req, res) => {
       username: username,
       email: email,
       about: about,
+      picPath: _file ? dirAddress + "/" + newImgFileName : null,
       password: passwordHash,
       friends: friends,
       location: location,
     });
 
     // Save the new user to the database
-    const savedUser = await newUser.save();
-
-    // If a file is uploaded, rename and move it to a user-specific directory
-    if (_file) {
-      const picPath = renameAndMove("user/" + newUser._id, _file.originalname);
-      await Users.findByIdAndUpdate(newUser._id, {
-        $set: { picPath: picPath },
-      });
-    }
-
+    await newUser.save();
     // Send a success response
     res.status(200).json({ msg: "Saved successfully" });
   } catch (error) {
-    _file && deleteFile(_file.path); // Delete the uploaded file in case of an error
-    res.status(500).json({ msg: "Something went wrong" });
+    // console.log(error);
+    res.status(500).json({ msg: "Something went wrong", err: error });
   }
 };
 // Controller function to get user names
@@ -139,9 +141,18 @@ export const updateRegisteredData = async (req, res) => {
 
     // Check if the provided email is already used by another user
     if (user.email !== email && (await Users.findOne({ email: email }))) {
-      _file && deleteFile(_file.path); // Delete the uploaded file
       return res.status(400).json({ msg: "Email already used!" });
     }
+    // console.log(username);
+    const dirAddress = "Users/" + username;
+    const newImgFileName = "profileImg";
+    // upload image to cloudnary
+    if (_file)
+      await uploadFile({
+        file: _file,
+        newImgFileName: newImgFileName,
+        dirAddress: dirAddress,
+      });
 
     // Update the user's data in the database
     await Users.findOneAndUpdate(
@@ -160,23 +171,10 @@ export const updateRegisteredData = async (req, res) => {
       }
     );
 
-    if (_file) {
-      try {
-        deleteFile("public/" + user.picPath); // Delete the user's old profile picture
-      } catch (error) {}
-      const picPath = renameAndMove("user/" + _id, _file.originalname); // Rename and move the new profile picture
-      await Users.findOneAndUpdate(
-        { username: _id },
-        {
-          $set: { picPath: picPath },
-        }
-      );
-    }
-
     const userDt = await Users.findOne({ username: _id }); // Retrieve the updated user data
     res.status(200).json({ user: userDt }); // Send a 200 (OK) response with the updated user data
   } catch (error) {
-    _file && deleteFile(_file.path); // Delete the uploaded file in case of an error
+    console.log(error);
     res.status(500).json({ msg: "Server Error" }); // Send a 500 (Internal Server Error) response if there's an error
   }
 };
