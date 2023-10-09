@@ -1,12 +1,11 @@
 import { v2 as cloudinary } from "cloudinary";
-import { isFileValid } from "./fileDetails.js";
 import streamifier from "streamifier";
 
 // Configure Cloudinary with your credentials
 cloudinary.config({
-  cloud_name: "dbnmraxnj",
-  api_key: "297941653861185",
-  api_secret: "MA7jhoSvHc2kZc-D1xoFaw9UeEw",
+  cloud_name: process.env.cloudinary_cloud_name,
+  api_key: process.env.cloudinary_api_key,
+  api_secret: process.env.cloudinary_api_secret,
 });
 // Define the uploadFile function
 export const uploadFile = async ({ file, newImgFileName, dirAddress }) => {
