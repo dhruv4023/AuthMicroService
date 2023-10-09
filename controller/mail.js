@@ -19,15 +19,15 @@ export const sendMail = async (req, res) => {
 
     // Define email options including sender, recipient, subject, and text
     const mailOptions = {
-      from: "abzxy50312@gmail.com", // Sender's email address
+      from: process.env.sender_email, // Sender's email address
       to: email, // Recipient's email address
       subject: subject, // Email subject
       text: text, // Email body text
     };
 
     // Send the email using the Nodemailer transporter
-    // await transporter.sendMail(mailOptions);
-    console.log(otp)
+    if (Boolean(process.env.DEBUG)) console.log(otp);
+    else await transporter.sendMail(mailOptions);
     // Send a success response if the email is sent successfully
     res.send("Email sent successfully");
   } catch (error) {
