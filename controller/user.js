@@ -5,7 +5,7 @@ import Users from "../models/Users.js"; // Import the Users model
 export const getUsers = async (req, res) => {
   try {
     const { UID } = req.params;
-
+    
     // Check if UID is a valid ObjectId (User ID)
     if (mongoose.isValidObjectId(UID)) {
       // Find a user by their User ID
