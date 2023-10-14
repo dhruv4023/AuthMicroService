@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import Users from "../models/Users.js"; // Import the Users model
 import generateJWTToken from "../middleware/generateToken.js"; // Import JWT token generator
 import { uploadFile } from "../helper/uploadFileToCloudnary.js";
+import { getUserData } from "../services/user.js";
 
 /* REGISTER USER */
 export const registerControl = async (req, res) => {
@@ -20,7 +21,7 @@ export const registerControl = async (req, res) => {
     };
 
     // Check if a user with the same email already exists
-    const user = await Users.findOne({ email: email });
+    const user = getUserData({ id: email });
     if (user) {
       return res.status(400).json({ msg: "User already exists!" });
     }
@@ -74,11 +75,10 @@ export const getUserNames = async (req, res) => {
 // Controller function for user login
 export const loginControl = async (req, res) => {
   try {
-    const { email, password } = req.body; // Extract email and password from the request body
-    const user = await Users.findOne({
-      $or: [{ email: email }, { username: email }], // Check if the user exists based on email or username
-    });
-
+    const { uid, password } = req.body; // Extract email and password from the request body
+    // console.log(req.body)
+    const user = await getUserData({ id: uid, delPassword: false });
+    // console.log(user)
     if (!user)
       return res
         .status(400)
@@ -92,10 +92,12 @@ export const loginControl = async (req, res) => {
         .json({ exist: false, mess: "Invalid credentials" }); // If the password doesn't match, send a 400 (Bad Request) response
 
     const token = generateJWTToken(user, process.env.JWT_SECRECT); // Generate a JWT token for the user
-    delete user.password; // Remove the password from the user object
+
+    user.password = undefined; // Remove the password from the user object
 
     res.status(200).json({ exist: true, token, user }); // Send a 200 (OK) response with the JWT token and user information
   } catch (error) {
+    console.log(error);
     res.status(500).json({ exist: false, mess: "Failed to login" }); // Send a 500 (Internal Server Error) response if there's an error
   }
 };
