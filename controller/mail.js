@@ -29,10 +29,11 @@ export const sendMail = async (req, res) => {
     if (Boolean(process.env.DEBUG)) console.log(otp);
     else await transporter.sendMail(mailOptions);
     // Send a success response if the email is sent successfully
-    res.send("Email sent successfully");
+    // res.send("Email sent successfully");
+    res.status(200).send({msg:"Email sent successfully"});
   } catch (error) {
     // Handle errors and send a 500 (Internal Server Error) response if email sending fails
     console.error(error);
-    res.status(500).send("Email sending failed");
+    res.status(500).send({msg:"Email sending failed"});
   }
 };

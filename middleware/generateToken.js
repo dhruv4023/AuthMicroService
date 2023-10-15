@@ -5,7 +5,7 @@ const generateJWTToken = (user, secretKey) => {
   // Define the payload, including type ("typ") and expiration ("exp") claims
   const payload = {
     exp: Math.floor(Date.now() / 1000) + ( 60 * 60 ) * 2, // Expiration in 2 hour (adjust as needed)
-    userId: user._id, // Subject claim with the user
+    userId: user.username, // Subject claim with the user
   };
   
   // Generate the JWT token using the payload and the provided secret key
