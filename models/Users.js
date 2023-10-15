@@ -40,9 +40,9 @@ const userSchema = mongoose.Schema(
       default: "", // Default profile picture path
     },
     location: {
-      state: { type: String },
-      city: { type: String },
-      pincode: { type: String },
+      state: { type: String, require: true },
+      city: { type: String, require: true },
+      pincode: { type: String, require: true },
     },
     impressions: { type: Number, default: 0 }, // Default impression count
   },
