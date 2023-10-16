@@ -29,18 +29,16 @@ export const registerControl = async (req, res) => {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const dirAddress = "Users/" + username;
-    const newImgFileName = "profileImg";
     // console.log(_file);
     // upload image to cloudnary
     let filePath = null;
     if (_file) {
       const fileData = await uploadFile({
         file: _file,
-        newImgFileName: newImgFileName,
-        dirAddress: dirAddress,
+        newImgFileName: "profileImg",
+        dirAddress: "Users/" + username,
       });
-      filePath=fileData.public_id;
+      filePath = fileData.public_id;
     }
     // console.log("filePath :-  ", filePath);
     // Create a new User document
@@ -50,7 +48,7 @@ export const registerControl = async (req, res) => {
       username: username,
       email: email,
       about: about,
-      picPath: filePath ? filePath: null,
+      picPath: filePath ? filePath : null,
       password: passwordHash,
       friends: friends,
       location: location,
@@ -148,16 +146,17 @@ export const updateRegisteredData = async (req, res) => {
     if (user.email !== email && (await Users.findOne({ email: email }))) {
       return res.status(400).json({ msg: "Email already used!" });
     }
-    // console.log(username);
-    const dirAddress = "Users/" + username;
-    const newImgFileName = "profileImg";
+
     // upload image to cloudnary
-    if (_file)
-      await uploadFile({
+    let filePath = null;
+    if (_file) {
+      const fileData = await uploadFile({
         file: _file,
-        newImgFileName: newImgFileName,
-        dirAddress: dirAddress,
+        newImgFileName: "profileImg",
+        dirAddress: "Users/" + username,
       });
+      filePath = fileData.public_id;
+    }
 
     // Update the user's data in the database
     await Users.findOneAndUpdate(
@@ -169,6 +168,7 @@ export const updateRegisteredData = async (req, res) => {
           username: username,
           email: email,
           about: about,
+          picPath: filePath ? filePath : user?.picPath,
           friends: friends,
           location: location,
           socialLinks: socialLinks,
