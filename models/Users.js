@@ -1,39 +1,38 @@
 import mongoose from "mongoose";
 
 // Define the user schema for MongoDB
-const userSchema = mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      require: true,
-      min: 2,
-      max: 50,
+      required: true,
+      minlength: 2,
+      maxlength: 50,
     },
     lastName: {
       type: String,
-      require: true,
-      min: 2,
-      max: 50,
+      required: true,
+      minlength: 2,
+      maxlength: 50,
     },
     username: {
       type: String,
-      require: true,
-      min: 2,
-      max: 50,
-      unique: true, // Ensure usernames are unique
+      required: true,
+      minlength: 2,
+      maxlength: 50,
+      unique: true,
     },
-    about: { type: String },
+    about: String, // Optional about field
     email: {
       type: String,
-      require: true,
-      min: 2,
-      unique: true, // Ensure email addresses are unique
+      required: true,
+      unique: true,
+      match: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/, // Basic email pattern validation
     },
     password: {
       type: String,
-      require: true,
-      min: 5,
-      max: 32,
+      required: true,
+      minlength: 5,
     },
     picPath: {
       type: String,
@@ -42,7 +41,7 @@ const userSchema = mongoose.Schema(
     location: {
       state: { type: String, require: true },
       city: { type: String, require: true },
-      pincode: { type: String, require: true },
+      pincode: { type: Number, require: true },
     },
     impressions: { type: Number, default: 0 }, // Default impression count
   },

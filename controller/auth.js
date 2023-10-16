@@ -15,13 +15,12 @@ export const registerControl = async (req, res) => {
     // Extract and structure user location data
     const location = {
       state: req.body["location.state"],
-      district: req.body["location.district"],
       city: req.body["location.city"],
       pincode: req.body["location.pincode"],
     };
 
     // Check if a user with the same email already exists
-    const user = getUserData({ id: email });
+    const user = await getUserData({ id: email });
     if (user) {
       return res.status(400).json({ msg: "User already exists!" });
     }
@@ -32,14 +31,18 @@ export const registerControl = async (req, res) => {
 
     const dirAddress = "Users/" + username;
     const newImgFileName = "profileImg";
+    // console.log(_file);
     // upload image to cloudnary
-    if (_file)
-      await uploadFile({
+    let filePath = null;
+    if (_file) {
+      const fileData = await uploadFile({
         file: _file,
         newImgFileName: newImgFileName,
         dirAddress: dirAddress,
       });
-
+      filePath=fileData.public_id;
+    }
+    // console.log("filePath :-  ", filePath);
     // Create a new User document
     const newUser = new Users({
       firstName: firstName,
@@ -47,7 +50,7 @@ export const registerControl = async (req, res) => {
       username: username,
       email: email,
       about: about,
-      picPath: _file ? dirAddress + "/" + newImgFileName : null,
+      picPath: filePath ? filePath: null,
       password: passwordHash,
       friends: friends,
       location: location,
@@ -58,7 +61,7 @@ export const registerControl = async (req, res) => {
     // Send a success response
     res.status(200).json({ msg: "Saved successfully" });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     res.status(500).json({ msg: "Something went wrong", err: error });
   }
 };

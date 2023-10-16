@@ -6,6 +6,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import { v2 as cloudinary } from "cloudinary";
 
 // Load environment variables from a .env file
 dotenv.config();
@@ -61,3 +62,10 @@ mongoose
   .catch((e) => {
     console.log("db not connected");
   });
+
+// Cloudnary configuration ------------------------------------
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
