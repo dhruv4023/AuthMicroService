@@ -92,7 +92,10 @@ export const loginControl = async (req, res) => {
         .status(400)
         .json({ exist: false, mess: "Invalid credentials" }); // If the password doesn't match, send a 400 (Bad Request) response
 
-    const token = generateJWTToken(user, process.env.JWT_SECRECT); // Generate a JWT token for the user
+    const token = generateJWTToken({
+      data: { userId: user.username },
+      secretKey: process.env.JWT_SECRECT,
+    }); // Generate a JWT token for the user
 
     user.password = undefined; // Remove the password from the user object
 
