@@ -45,25 +45,22 @@ app.listen(process.env.PORT, () => {
   console.log("Server is running on PORT:", process.env.PORT);
 });
 
-/* ----------------------------MONGODB CONNECTION------------------- */
+/* ---------------------------- SQL SERVER CONNECTION ------------------- */
+import mysql from "mysql";
+// SQL Server configuration
+var con = mysql.createConnection({
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB,
+});
 
-import mongoose from "mongoose";
-mongoose.set("strictQuery", true);
+con.connect(function (err) {
+  if (err) throw err;
+  console.log("mysql Connected!");
+});
 
-// Connect to MongoDB using the provided DB_URL
-mongoose
-  .connect(process.env.DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("MongoDB database connected");
-  })
-  .catch((e) => {
-    console.log("db not connected");
-  });
-
-// Cloudnary configuration ------------------------------------
+/* ---------------------------- Cloudinary configuration ------------------- */
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
