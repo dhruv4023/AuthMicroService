@@ -1,7 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
@@ -9,6 +8,7 @@ import { fileURLToPath } from "url";
 import { v2 as cloudinary } from "cloudinary";
 
 // Load environment variables from a .env file
+import dotenv from "dotenv";
 dotenv.config();
 
 // Create an Express application
@@ -32,33 +32,19 @@ app.get("/", (req, res) => {
 });
 
 // Define routes for authentication, user, and mail functionality
-import userRoute from "./routes/userRoutes.js";
 import authRoute from "./routes/authRoutes.js";
-import mailRoute from "./routes/mail.js";
+// import userRoute from "./routes/userRoutes.js";
+// import mailRoute from "./routes/mail.js";
 
 app.use("/auth", authRoute); // Use the authentication route
-app.use("/user", userRoute); // Use the user route
-app.use("/mail", mailRoute); // Use the mail route
+// app.use("/user", userRoute); // Use the user route
+// app.use("/mail", mailRoute); // Use the mail route
 
 // Start the server and listen on the specified port
 app.listen(process.env.PORT, () => {
   console.log("Server is running on PORT:", process.env.PORT);
 });
 
-/* ---------------------------- SQL SERVER CONNECTION ------------------- */
-import mysql from "mysql";
-// SQL Server configuration
-var con = mysql.createConnection({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DB,
-});
-
-con.connect(function (err) {
-  if (err) throw err;
-  console.log("mysql Connected!");
-});
 
 /* ---------------------------- Cloudinary configuration ------------------- */
 cloudinary.config({

@@ -1,52 +1,34 @@
-import mongoose from "mongoose";
+// import mysql from "mysql";
 
-// Define the user schema for MongoDB
-const userSchema = new mongoose.Schema(
-  {
-    firstName: {
-      type: String,
-      required: true,
-      minlength: 2,
-      maxlength: 50,
-    },
-    lastName: {
-      type: String,
-      required: true,
-      minlength: 2,
-      maxlength: 50,
-    },
-    username: {
-      type: String,
-      required: true,
-      minlength: 2,
-      maxlength: 50,
-      unique: true,
-    },
-    about: String, // Optional about field
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      match: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/, // Basic email pattern validation
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 5,
-    },
-    picPath: {
-      type: String,
-      default: "", // Default profile picture path
-    },
-    location: {
-      state: { type: String, require: true },
-      city: { type: String, require: true },
-      pincode: { type: Number, require: true },
-    },
-    impressions: { type: Number, default: 0 }, // Default impression count
-  },
-  { timestamps: true } // Add timestamps for createdAt and updatedAt
-);
+// // Create a MySQL pool
+// const pool = mysql.createPool({
+//   host: process.env.MYSQL_HOST,
+//   user: process.env.MYSQL_USER,
+//   password: process.env.MYSQL_PASSWORD,
+//   database: process.env.MYSQL_DB,
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0,
+// });
 
-// Export the user schema as a Mongoose model named "Users"
-export default mongoose.model("Users", userSchema);
+// // Define the SQL query to create the MySQL table
+// const createTableQuery = `
+//   CREATE TABLE IF NOT EXISTS users (
+//     id INT AUTO_INCREMENT PRIMARY KEY,
+//     first_name VARCHAR(50) NOT NULL,
+//     last_name VARCHAR(50) NOT NULL,
+//     username VARCHAR(50) NOT NULL UNIQUE,
+//     email VARCHAR(255) NOT NULL UNIQUE,
+//     password VARCHAR(255) NOT NULL,
+//     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+//   )
+
+// // Function to create the MySQL table
+// async function createTable() {
+//   const connection = pool.getConnection();
+//   await connection.query(createTableQuery);
+//   connection.release();
+// }
+
+// export default createTable;

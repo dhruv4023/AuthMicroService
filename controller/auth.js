@@ -1,33 +1,19 @@
-import bcrypt from "bcrypt";
-import Users from "../models/Users.js"; // Import the Users model
 import generateJWTToken from "../middleware/generateToken.js"; // Import JWT token generator
 import { uploadFile } from "../helper/uploadFileToCloudnary.js";
-import { getUserData } from "../services/user.js";
+import { addNewUserData, getUserData } from "../services/user.js";
 
 /* REGISTER USER */
 export const registerControl = async (req, res) => {
   const _file = req.file; // Get the uploaded file, if any
   try {
     // console.log(_file)
-    const { firstName, lastName, username, email, password, friends, about } =
-      req.body; // Extract user registration data
-    // console.log(req.body);
-    // Extract and structure user location data
-    const location = {
-      state: req.body["location.state"],
-      city: req.body["location.city"],
-      pincode: req.body["location.pincode"],
-    };
+    const { username, email } = req.body; // Extract user registration data
 
     // Check if a user with the same email already exists
-    const user = await getUserData({ id: email });
-    if (user) {
-      return res.status(400).json({ msg: "User already exists!" });
-    }
-
-    // Generate a salt and hash the user's password
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    // const user = await getUserData({ id: email });
+    // if (user) {
+    //   return res.status(400).json({ msg: "User already exists!" });
+    // }
 
     // console.log(_file);
     // upload image to cloudnary
@@ -40,29 +26,17 @@ export const registerControl = async (req, res) => {
       });
       filePath = fileData.public_id;
     }
-    // console.log("filePath :-  ", filePath);
-    // Create a new User document
-    const newUser = new Users({
-      firstName: firstName,
-      lastName: lastName,
-      username: username,
-      email: email,
-      about: about,
-      picPath: filePath ? filePath : null,
-      password: passwordHash,
-      friends: friends,
-      location: location,
-    });
+    console.log("filePath :-  ", filePath);
 
-    // Save the new user to the database
-    await newUser.save();
-    // Send a success response
-    res.status(200).json({ msg: "Saved successfully" });
+    const results = await addNewUserData(req.body);
+    if (results) res.status(500).send("Error inserting new user");
+    else res.status(201).json({ userId: results?.insertId });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Something went wrong", err: error });
   }
 };
+
 // Controller function to get user names
 export const getUserNames = async (req, res) => {
   try {
