@@ -21,7 +21,7 @@ export const verifyToken = async (req, res, next) => {
     const verified = jwt.verify(token, process.env.JWT_SECRECT);
 
     // Attach the verified user information to the request object
-    req.user = verified;
+    req.tokenData = verified;
 
     // Continue to the next middleware or route handler
     next();
