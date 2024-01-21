@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-
+import x from "./cloudnary/cloudnaryConfig.js"
 import config from './config/config.js';
 
 const app = express();
