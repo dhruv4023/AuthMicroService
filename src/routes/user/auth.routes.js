@@ -6,9 +6,9 @@ import {
   changePassControl,
   getUserNames,
   updateRegisteredData,
-} from "../controller/auth.js";
-import { verifyToken } from "../middleware/auth.js";
-import upload from "../middleware/fileUploder.js";
+} from "../../controller/auth.controller.js";
+import { verifyToken } from "../../middleware/auth.js";
+import upload from "../../middleware/fileUploder.js";
 
 // Create a new Express Router
 const routes = express.Router();

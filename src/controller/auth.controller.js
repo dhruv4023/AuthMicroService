@@ -1,18 +1,15 @@
 import bcrypt from "bcrypt";
-import Users from "../models/Users.js"; // Import the Users model
 import generateJWTToken from "../middleware/generateToken.js"; // Import JWT token generator
 import { uploadFile } from "../helper/uploadFileToCloudnary.js";
 import { getUserData } from "../services/user.js";
+import db from "../models/index.js"
 
+const { Users } = db;
 /* REGISTER USER */
 export const registerControl = async (req, res) => {
   const _file = req.file; // Get the uploaded file, if any
   try {
-    // console.log(_file)
-    const { firstName, lastName, username, email, password, friends, about } =
-      req.body; // Extract user registration data
-    // console.log(req.body);
-    // Extract and structure user location data
+    const { body: { firstName, lastName, username, email, password, about } } = req; // Extract user registration data
     const location = {
       state: req.body["location.state"],
       city: req.body["location.city"],
@@ -50,7 +47,6 @@ export const registerControl = async (req, res) => {
       about: about,
       picPath: filePath ? filePath : null,
       password: passwordHash,
-      friends: friends,
       location: location,
     });
 

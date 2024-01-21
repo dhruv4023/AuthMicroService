@@ -1,11 +1,13 @@
-import Users from "../models/Users.js";
+import db from "../models/index.js"
 import mongoose from "mongoose";
+
+const { Users } = db;
 export const getUserData = async ({ id, delPassword = true }) => {
   const query = mongoose.isValidObjectId(id)
     ? { _id: id }
     : {
-        $or: [{ email: id }, { username: id }],
-      };
+      $or: [{ email: id }, { username: id }],
+    };
   // console.log(query)
   const user = await Users.findOne(query);
   if (user) {

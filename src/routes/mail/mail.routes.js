@@ -1,7 +1,7 @@
 // Import the necessary dependencies
 import express from "express";
-import { sendOTP, verifyOTP } from "../controller/otp.js";
-import { verifyToken } from "../middleware/auth.js";
+import { sendOTP, verifyOTP } from "../../controller/otp.controller.js";
+import { verifyToken } from "../../middleware/auth.js";
 
 // Create a new Express Router
 const routes = express.Router();

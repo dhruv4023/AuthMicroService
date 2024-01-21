@@ -2,7 +2,7 @@ import express from "express";
 
 import {
   getUsers,
-} from "../controller/user.js";
+} from "../../controller/user.controller.js";
 
 // Create a new Express Router
 const routes = express.Router();

@@ -49,4 +49,4 @@ const userSchema = new mongoose.Schema(
 );
 
 // Export the user schema as a Mongoose model named "Users"
-export default mongoose.model("Users", userSchema);
+export default userSchema;
