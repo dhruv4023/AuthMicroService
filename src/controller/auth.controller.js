@@ -9,8 +9,7 @@ const { Users } = db;
 export const registerControl = async (req, res) => {
   const _file = req.file; // Get the uploaded file, if any
   try {
-    const { body: { firstName, lastName, username, email, password, friends, about } } = req; // Extract user registration data
-    
+    const { body: { firstName, lastName, username, email, password, about } } = req; // Extract user registration data
     const location = {
       state: req.body["location.state"],
       city: req.body["location.city"],
@@ -48,7 +47,6 @@ export const registerControl = async (req, res) => {
       about: about,
       picPath: filePath ? filePath : null,
       password: passwordHash,
-      friends: friends,
       location: location,
     });
 
