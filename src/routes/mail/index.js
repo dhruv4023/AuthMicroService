@@ -2,10 +2,9 @@ import express from 'express';
 const router = express.Router();
 
 // importing base routes
-import mailRoutes from './mail.routes.js';
+import verificationlinkRoutes from './verificationlink.routes.js'
 
 // defining routes
-router.use('/mail', mailRoutes);
+router.use('/mail', verificationlinkRoutes);
 // exporting router
 export default router;
-  

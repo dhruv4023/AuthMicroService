@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import config from "../config/config.js";
 
 
 // Middleware function to verify JWT tokens
@@ -16,9 +17,9 @@ export const verifyToken = async (req, res, next) => {
     if (token.startsWith("Bearer ")) {
       token = token.slice(7, token.length).trimLeft();
     }
-    // console.log(process.env.JWT_SECRECT);
+
     // Verify the token using the JWT_SECRECT from environment variables
-    const verified = jwt.verify(token, process.env.JWT_SECRECT);
+    const verified = jwt.verify(token, config.jwt_secret);
 
     // Attach the verified user information to the request object
     req.tokenData = verified;

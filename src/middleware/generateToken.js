@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
+import config from "../config/config.js";
 
 // Function to generate a JWT token
-const generateJWTToken = ({ data, secretKey, expMin = 120 }) => {
+const generateJWTToken = ({ data, expMin = 120 }) => {
   // Define the payload, including type ("typ") and expiration ("exp") claims
   const payload = {
     exp: Math.floor(Date.now() / 1000) + 60 * expMin, // Expiration in 2 hour (adjust as needed)
@@ -9,7 +10,7 @@ const generateJWTToken = ({ data, secretKey, expMin = 120 }) => {
   };
 
   // Generate the JWT token using the payload and the provided secret key
-  const token = jwt.sign(payload, secretKey);
+  const token = jwt.sign(payload, config.jwt_secret);
 
   // Return the generated token
   return token;

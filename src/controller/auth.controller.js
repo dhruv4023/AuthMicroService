@@ -3,6 +3,7 @@ import generateJWTToken from "../middleware/generateToken.js"; // Import JWT tok
 import { uploadFile } from "../helper/uploadFileToCloudnary.js";
 import { getUserData } from "../services/user.service.js";
 import db from "../models/index.js"
+import { sendVerificationLink } from "../services/verificationlink.service.js";
 
 const { Users } = db;
 /* REGISTER USER */
@@ -39,7 +40,7 @@ export const registerControl = async (req, res) => {
     }
     // console.log("filePath :-  ", filePath);
     // Create a new User document
-    const newUser = new Users({
+    const newUser = {
       firstName: firstName,
       lastName: lastName,
       username: username,
@@ -48,12 +49,13 @@ export const registerControl = async (req, res) => {
       picPath: filePath ? filePath : null,
       password: passwordHash,
       location: location,
-    });
+    };
 
+    const msg = await sendVerificationLink(newUser);
     // Save the new user to the database
-    await newUser.save();
+    // await newUser.save();
     // Send a success response
-    res.status(200).json({ msg: "Saved successfully" });
+    res.status(200).json({ msg: msg });
   } catch (error) {
     console.log(error);
     res.status(500).json({ msg: "Something went wrong", err: error });
@@ -89,8 +91,7 @@ export const loginControl = async (req, res) => {
         .json({ exist: false, mess: "Invalid credentials" }); // If the password doesn't match, send a 400 (Bad Request) response
 
     const token = generateJWTToken({
-      data: { userId: user.username },
-      secretKey: process.env.JWT_SECRECT,
+      data: { userId: user.username }
     }); // Generate a JWT token for the user
 
     user.password = undefined; // Remove the password from the user object

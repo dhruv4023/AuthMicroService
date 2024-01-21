@@ -1,19 +1,19 @@
 import nodemailer from "nodemailer";
-
-export const sendEmailMail = async ({ recepient, subject, body }) => {
+import config from "../config/config.js";
+export const sendEmailMail = async ({ recipient, subject, body }) => {
   // Create a Nodemailer transporter with Gmail service
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
-      user: process.env.SENDER_EMAIL, // Use the sender's email address from environment variables
-      pass: process.env.SENDER_PASSWORD, // Use the sender's email password from environment variables
+      user: config.mail.sender_email, // Use the sender's email address from environment variables
+      pass: config.mail.sender_password, // Use the sender's email password from environment variables
     },
   });
-
+  
   // Define email options including sender, recipient, subject, and text
   const mailOptions = {
     from: process.env.SENDER_EMAIL, // Sender's email address
-    to: recepient, // Recipient's email address
+    to: recipient, // Recipient's email address
     subject: subject, // Email subject
     text: body, // Email body text
   };

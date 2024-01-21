@@ -16,8 +16,13 @@ mongoose
         console.log("db not connected: ", e);
     });
 
-import userSchema from "./Users.js";
+import userSchema from "./users.model.js";
+import verificationSchema from "./verificationlink.model.js";
 
-const db = { Users: mongoose.model("Users", userSchema) }
+
+const db = {
+    Users: mongoose.model("Users", userSchema),
+    VerificationLink: mongoose.model('Verification', verificationSchema)
+}
 
 export default db
