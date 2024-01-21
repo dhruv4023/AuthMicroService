@@ -1,4 +1,4 @@
-import { getUserData } from "../services/user.js";
+import { getUserData } from "../services/user.service.js";
 import cache from "memory-cache"; // Import memory-cache
 
 // Controller function to get user information by UID (User ID or username)

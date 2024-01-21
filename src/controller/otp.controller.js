@@ -1,5 +1,5 @@
 import generateJWTToken from "../middleware/generateToken.js";
-import { sendEmailMail } from "../services/mail.js";
+import { sendEmailMail } from "../services/mail.service.js";
 
 // Controller function to send an OTP (One-Time Password) email
 export const sendOTP = async (req, res) => {

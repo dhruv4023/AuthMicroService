@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import generateJWTToken from "../middleware/generateToken.js"; // Import JWT token generator
 import { uploadFile } from "../helper/uploadFileToCloudnary.js";
-import { getUserData } from "../services/user.js";
+import { getUserData } from "../services/user.service.js";
 import db from "../models/index.js"
 
 const { Users } = db;

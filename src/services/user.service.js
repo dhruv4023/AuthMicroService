@@ -16,7 +16,7 @@ export const getUserData = async ({ id, delPassword = true }) => {
     delPassword && (user.password = undefined);
     return user;
   } else {
-    console.log("User not found.");
+    // console.log("User not found.");
     return null;
   }
 };
