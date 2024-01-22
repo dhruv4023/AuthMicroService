@@ -9,13 +9,19 @@ const routes = globSync('src/routes/**/index.js', {
 });
 
 // Iterate over each route file and add it to the router
-routes.forEach(async route => {
-    const routeModule = await import(
-        route.replace(path.join('src', 'routes'), './')
-    );
-    // Add the route to the router
-    router.use('', routeModule.default);
-});
+// routes.forEach(async route => {
+//     const routeModule = await import(
+//         route.replace(path.join('src', 'routes'), './')
+//     );
+//     // Add the route to the router
+//     router.use('', routeModule.default);
+// });
+
+import user_api from "./user/index.js"
+import mail_api from "./mail/index.js"
+router.use("", user_api)
+router.use("", mail_api)
+
 
 // exporting router
 export default router;
