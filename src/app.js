@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 import routes_v1 from './routes/index.routes.js';
 
 // defining routes
-app.use('/api/v1/', routes_v1);
+app.use('/api/v1', routes_v1);
 
 
 export default app

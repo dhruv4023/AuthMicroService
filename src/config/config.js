@@ -23,9 +23,9 @@ export default {
     },
     protocol: process.env.PROTOCOL || 'http',
     port: process.env.APP_PORT || 8088,
-    app_base_url: process.env.APP_BASE_URL || 'http://localhost:8088/api/v1',
+    app_base_url: process.env.APP_BASS_URL || 'http://localhost:8088/api/v1',
     app_project_path: process.env.APP_PROJECT_PATH || 'http://localhost:4040',
     node_env: process.env.NODE_ENV || 'development',
-    origin_url_list: process.env.ORIGIN_URL_List || '[ "http://localhost:3000" ]',
+    origin_url_list: process.env.ORIGIN_URL_LIST || '[ "http://localhost:3000" ]',
     jwt_secret: process.env.JWT_SECRECT,
 };

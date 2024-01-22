@@ -14,7 +14,7 @@ routes.forEach(async route => {
         route.replace(path.join('src', 'routes'), './')
     );
     // Add the route to the router
-    router.use('/', routeModule.default);
+    router.use('', routeModule.default);
 });
 
 // exporting router
