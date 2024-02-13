@@ -3,12 +3,11 @@ import express from "express";
 import {
   registerControl,
   loginControl,
-  changePassControl,
   getUserNames,
-  updateRegisteredData,
-} from "../../controller/auth.controller.js";
-import { verifyToken } from "../../middleware/auth.js";
-import upload from "../../middleware/fileUploder.js";
+  changePassControl,
+} from "../../controllers/auth.controller.js";
+import { verifyTokenAndRole } from "../../middlewares/auth.js";
+import upload from "../../middlewares/file_uploder.js";
 
 // Create a new Express Router
 const routes = express.Router();
@@ -16,22 +15,14 @@ const routes = express.Router();
 // Define a POST route for user registration
 routes.post("/register", upload.single("picPath"), registerControl);
 
-// Define a GET route to fetch user usernames
-routes.get("/usernames", getUserNames);
-
 // Define a POST route for user login
 routes.post("/login", loginControl);
 
 // Define a POST route for changing user passwords
-routes.post("/changepass", changePassControl);
+routes.put("/change/password", verifyTokenAndRole(['user', "admin"]), changePassControl);
 
-// Define a POST route to update user data by ID, with token verification and file upload
-routes.post(
-  "/update/:id",
-  verifyToken, // Middleware to verify JWT token
-  upload.single("picPath"), // Middleware for uploading a single file
-  updateRegisteredData
-);
+// Define a GET route to fetch user usernames
+routes.get("/get/usernames", getUserNames);
 
 // Export the router for use in other parts of the application
 export default routes;

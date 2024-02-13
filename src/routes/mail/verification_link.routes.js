@@ -1,6 +1,6 @@
 // Import the necessary dependencies
 import express from "express";
-import { verifyVerificationLink } from "../../controller/verificationLink.controller.js";
+import { verifyVerificationLink } from "../../controllers/verification_link.controller.js";
 
 // Create a new Express Router
 const routes = express.Router();

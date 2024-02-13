@@ -26,7 +26,7 @@ export const uploadFile = ({ file, newImgFileName, dirAddress }) => {
       // Pipe the file's stream to the Cloudinary upload stream
       streamifier.createReadStream(file.buffer).pipe(result);
     } catch (error) {
-      console.error("Error during file upload:", error);
+      // console.error("Error during file upload:", error);
       reject(error); // Reject the Promise on any other errors
     }
   });
