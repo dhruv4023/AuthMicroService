@@ -144,7 +144,7 @@ export const changePassControl = async (req, res) => {
   try {
     const { body: { email, password } } = req; // Extract email and new password from the request body
 
-    const user = await Users.findOne({ email, id: req.tokenData.userId }); // Find the user by their email
+    const user = await Users.findOne({ email, id: req?.tokenData.userId }); // Find the user by their email
 
     if (!user)
       return RESPONSE.error(res, 1027, 400);

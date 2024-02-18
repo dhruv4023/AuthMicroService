@@ -10,6 +10,7 @@ const MESSAGES = {
     1008: 'Verification email sent successfully!',
     1009: 'Usernames retrieved successfully',
     1010: "Password changed successfully!",
+    1011: 'Other users fetched successfully',
     1027: 'User not found, please check your username/email',
 
     // Authorization messages
@@ -18,7 +19,7 @@ const MESSAGES = {
     5003: 'Your session expired! Please log in again',
 
     8999: 'Validation error',
-    
+
     // General error message
     9999: 'Internal Server Error',
 };

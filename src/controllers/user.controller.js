@@ -3,18 +3,30 @@ import db from '../models/index.js';
 import RESPONSE from '../helpers/response.helper.js';
 import { uploadFile } from '../helpers/upload_file_to_cloudinary.helper.js';
 import isValidData from '../helpers/validation/data_validator.js';
+import { getPaginatedResponse, getPaginationMetadata } from '../helpers/pagination.helper.js';
 
 const { Users } = db;
 
+export const getOtherUsers = async (req, res) => {
+    try {
+        const { tokenData: { userId: id }, query: { page = 0, limit = 5 } } = req
+        const { startIndex } = getPaginationMetadata(req.query);
+
+        // Your logic to fetch other users goes here...
+        const otherUsers = await Users.find({ _id: { $ne: id } }).skip(startIndex).limit(limit);;
+
+        const totalCount = otherUsers.length;
+        const paginatedResponse = getPaginatedResponse(otherUsers, page, limit, totalCount);
+        // Example response when fetching other users succeeds
+        return RESPONSE.success(res, 1011, paginatedResponse);
+    } catch (error) {
+        console.error('Error fetching other users:', error);
+        return RESPONSE.error(res, 9999);
+    }
+};
+
 // Controller function to get user information by uid (User ID or username)
 export const getUsers = async (req, res) => {
-
-    const validationErr = await isValidData(req.params, {
-        uid: 'required|isEmailOrUsername',
-    })
-
-    if (validationErr)
-        return RESPONSE.error(res, validationErr);
 
     try {
         const { params: { uid } } = req;
@@ -63,7 +75,7 @@ export const updateUserData = async (req, res) => {
             pincode: req.body["location.pincode"],
         };
 
-        const user = await Users.findOne({ username, id }); // Find the user by their username and id
+        const user = await Users.findOne({ username, _id: id }); // Find the user by their username and id
 
         if (!user)
             return RESPONSE.error(res, 1027, 400);
@@ -83,7 +95,7 @@ export const updateUserData = async (req, res) => {
             });
             filePath = fileData.public_id;
         }
-        
+
         // Update the user's data in the database
         await Users.findOneAndUpdate(
             { id },
