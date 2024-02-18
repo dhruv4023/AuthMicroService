@@ -82,7 +82,7 @@ export const updateUserData = async (req, res) => {
 
         // Check if the provided email is already used by another user
         if (user.email !== email && (await Users.findOne({ email }))) {
-            return res.status(400).json({ msg: "Email already used!" });
+            return RESPONSE.error(res, 1004)
         }
 
         // upload image to cloudinary
