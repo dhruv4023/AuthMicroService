@@ -18,8 +18,6 @@ const MESSAGES = {
     5002: 'Access denied - Unauthorized',
     5003: 'Your session expired! Please log in again',
 
-    8999: 'Validation error',
-
     // General error message
     9999: 'Internal Server Error',
 };
