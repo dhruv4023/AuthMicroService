@@ -1,3 +1,4 @@
+import crypto from "crypto"
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 
@@ -17,4 +18,10 @@ const generateJWTToken = ({ data, expMin = 120 }) => {
 };
 
 // Export the function for use in other parts of the application
+
+
+export const generateVerificationToken = () => {
+  return crypto.randomBytes(20).toString('hex');
+};
+
 export default generateJWTToken;

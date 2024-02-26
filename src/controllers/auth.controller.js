@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import db from '../models/index.js';
 import RESPONSE from '../helpers/response.helper.js';
-import generateJWTToken from '../helpers/generate_token.helper.js';
+import generateJWTToken, { generateVerificationToken } from '../helpers/generate_token.helper.js';
 import { comparePassword, hashPassword } from '../helpers/bcrypt_password.helper.js';
 import isValidData from "../helpers/validation/data_validator.js";
-import { sendVerificationLink } from "../services/verification_link.service.js";
+import { sendVerificationEmail } from "../services/verification_link.service.js";
 import { uploadFile } from "../helpers/upload_file_to_cloudinary.helper.js";
 const { Users } = db;
 
@@ -17,7 +17,7 @@ export const registerControl = async (req, res) => {
     username: 'required|string',
     email: 'required|email',
     password: 'required|password',
-  })
+  });
 
   if (validationErr)
     return RESPONSE.error(res, validationErr);
@@ -47,9 +47,11 @@ export const registerControl = async (req, res) => {
       });
       filePath = fileData.public_id;
     }
-    // console.log("filePath :-  ", filePath);
+
+    const token = generateVerificationToken(); // Implement a function to generate a verification token
+
     // Create a new User document
-    const newUser = {
+    const newUser = new Users({
       firstName,
       lastName,
       username,
@@ -58,16 +60,46 @@ export const registerControl = async (req, res) => {
       picPath: filePath,
       password: hashPassword(password),
       location,
-    };
+      verificationToken: {
+        token,
+        expires: new Date(Date.now() + 10 * 60 * 1000),
+      },
+    });
 
-    await sendVerificationLink(newUser);
-    
+    await newUser.save();
+
+    // Send verification email with the token
+    await sendVerificationEmail({ recipient: newUser.email, token }); // Implement this function to send an email with the verification token
+
     // Send a success response
     RESPONSE.success(res, 1008);
   } catch (error) {
-
+console.log(error)
     // If an error occurs during registration, log the error and send a 500 Internal Server Error response
     RESPONSE.error(res, 9999, 500, error);
+  }
+};
+
+// Endpoint for verifying user with token
+export const verifyUserAccount = async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const user = await Users.findOne({ 'verificationToken.token': token });
+
+    if (!user || user.verificationToken.expires < new Date()) {
+      return RESPONSE.error(res, 400, 'Invalid or expired token');
+    }
+
+    // Mark the user as verified
+    user.verified = true;
+    user.verificationToken = undefined; // Clear verification token
+    await user.save();
+
+    // Send a success response
+    RESPONSE.success(res, 200, 'User verified successfully');
+  } catch (error) {
+    // Error handling
   }
 };
 

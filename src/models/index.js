@@ -17,12 +17,10 @@ mongoose
     });
 
 import userSchema from "./users.model.js";
-import verificationSchema from "./verification_link.model.js";
 
 
 const db = {
     Users: mongoose.model("Users", userSchema),
-    VerificationLink: mongoose.model('Verification', verificationSchema),
 }
 
 export default db

@@ -5,7 +5,7 @@ import {
   getUsers, updateUserData,
 } from "../../controllers/user.controller.js";
 import { verifyTokenAndRole } from "../../middlewares/auth.js";
-import upload from "../../middlewares/file_uploder.js";
+import upload from "../../middlewares/file_uploader.js";
 
 // Create a new Express Router
 const routes = express.Router();

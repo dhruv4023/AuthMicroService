@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Define the user schema for MongoDB
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -22,12 +21,12 @@ const userSchema = new mongoose.Schema(
       maxlength: 50,
       unique: true,
     },
-    about: String, // Optional about field
+    about: String,
     email: {
       type: String,
       required: true,
       unique: true,
-      match: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/, // Basic email pattern validation
+      match: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/,
     },
     password: {
       type: String,
@@ -36,21 +35,28 @@ const userSchema = new mongoose.Schema(
     },
     picPath: {
       type: String,
-      default: "", // Default profile picture path
+      default: "",
     },
     location: {
-      state: { type: String, require: true },
-      city: { type: String, require: true },
-      pincode: { type: Number, require: true },
+      state: { type: String, required: true },
+      city: { type: String, required: true },
+      pincode: { type: Number, required: true },
     },
     role: {
       type: String,
-      enum: ['admin', 'user'], // Only 'admin' or 'user' role is allowed
-      default: 'user', // Default role is 'user'
+      enum: ['admin', 'user'],
+      default: 'user',
+    },
+    verificationToken: {
+      token: {
+        type: String,
+      },
+      expires: {
+        type: Date,
+      },
     },
   },
-  { timestamps: true } // Add timestamps for createdAt and updatedAt
+  { timestamps: true }
 );
 
-// Export the user schema as a Mongoose model named "Users"
-export default userSchema;
+export default userSchema
