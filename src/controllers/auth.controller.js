@@ -60,10 +60,7 @@ export const registerControl = async (req, res) => {
       picPath: filePath,
       password: hashPassword(password),
       location,
-      verificationToken: {
-        token,
-        expires: new Date(Date.now() + 10 * 60 * 1000),
-      },
+      verificationToken: token,
     });
 
     await newUser.save();
@@ -74,7 +71,7 @@ export const registerControl = async (req, res) => {
     // Send a success response
     RESPONSE.success(res, 1008);
   } catch (error) {
-console.log(error)
+    console.log(error)
     // If an error occurs during registration, log the error and send a 500 Internal Server Error response
     RESPONSE.error(res, 9999, 500, error);
   }
@@ -83,23 +80,24 @@ console.log(error)
 // Endpoint for verifying user with token
 export const verifyUserAccount = async (req, res) => {
   const { token } = req.params;
-
   try {
-    const user = await Users.findOne({ 'verificationToken.token': token });
+    const user = await Users.findOne({ 'verificationToken': token });
 
-    if (!user || user.verificationToken.expires < new Date()) {
-      return RESPONSE.error(res, 400, 'Invalid or expired token');
+    if (!user) {
+      return RESPONSE.error(res, 9000, 400);
     }
 
     // Mark the user as verified
     user.verified = true;
     user.verificationToken = undefined; // Clear verification token
+    user.expiresAt = undefined; // Clear verification token
     await user.save();
 
     // Send a success response
     RESPONSE.success(res, 200, 'User verified successfully');
   } catch (error) {
-    // Error handling
+    console.log(error)
+    RESPONSE.error(res, 9999, 500, error);
   }
 };
 

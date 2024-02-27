@@ -19,6 +19,7 @@ const MESSAGES = {
     5003: 'Your session expired! Please log in again',
 
     // General error message
+    9000: 'Invalid or expired token',
     9999: 'Internal Server Error',
 };
 
