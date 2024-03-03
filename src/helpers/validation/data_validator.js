@@ -26,6 +26,14 @@ Validator.register(
     'The :attribute field cannot contain numbers.'
 );
 
+Validator.register(
+    'sixDigitNumber',
+    (value) => {
+        return /^\d{6}$/.test(value.toString());
+    },
+    'The :attribute field must be a 6-digit number.'
+);
+
 const isValidData = async (dataToBeValidate, constraints) => {
     let validation = new Validator(dataToBeValidate, constraints);
     if (validation.fails()) {

@@ -6,41 +6,62 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 2,
-      maxlength: 50,
+      maxlength: 20,
+      trim: true
     },
     lastName: {
       type: String,
       required: true,
       minlength: 2,
-      maxlength: 50,
+      maxlength: 20,
+      trim: true
     },
     username: {
       type: String,
       required: true,
       minlength: 2,
-      maxlength: 50,
+      maxlength: 15,
       unique: true,
+      trim: true,
+      lowercase: true // Convert to lowercase
     },
-    about: String,
+    about: {
+      type: String,
+      maxlength: 100 // Set maximum length
+    },
     email: {
       type: String,
       required: true,
       unique: true,
       match: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/,
+      trim: true
     },
     password: {
       type: String,
       required: true,
-      minlength: 5,
+      minlength: 6,
+      maxlength: 20
     },
     picPath: {
       type: String,
       default: "",
+      trim: true
     },
     location: {
-      state: { type: String, required: true },
-      city: { type: String, required: true },
-      pincode: { type: Number, required: true },
+      state: {
+        type: String,
+        required: true,
+        trim: true
+      },
+      city: {
+        type: String,
+        required: true,
+        trim: true
+      },
+      pincode: {
+        type: Number,
+        required: true
+      }
     },
     role: {
       type: String,
@@ -52,7 +73,7 @@ const userSchema = new mongoose.Schema(
       default: false
     },
     verificationToken: {
-      type: String,
+      type: String
     },
     expiresAt: {
       type: Date,
@@ -63,4 +84,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default userSchema
+export default userSchema;

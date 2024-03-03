@@ -11,12 +11,21 @@ const { Users } = db;
 // Controller for user registration
 export const registerControl = async (req, res) => {
 
-  const validationErr = await isValidData(req.body, {
+  const location = {
+    state: req.body["location.state"],
+    city: req.body["location.city"],
+    pincode: req.body["location.pincode"],
+  };
+
+  const validationErr = await isValidData({ ...req.body, ...location }, {
     firstName: 'required|string|min:2|max:20|nameWithoutNumbers',
     lastName: 'required|string|min:2|max:20|nameWithoutNumbers',
     username: 'required|string',
     email: 'required|email',
     password: 'required|password',
+    state: 'required|string',
+    city: 'required|string',
+    pincode: 'required|sixDigitNumber'
   });
 
   if (validationErr)
@@ -25,11 +34,6 @@ export const registerControl = async (req, res) => {
   try {
     const _file = req.file; // Get the uploaded file, if any
     const { body: { firstName, lastName, username, email, password, about } } = req; // Extract user registration data
-    const location = {
-      state: req.body["location.state"],
-      city: req.body["location.city"],
-      pincode: req.body["location.pincode"],
-    };
 
     // Check if a user with the same email already exists
     const user = await Users.findOne({ email });
