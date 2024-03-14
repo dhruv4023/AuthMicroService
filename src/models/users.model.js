@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
-      maxlength: 20
+      maxlength: 32
     },
     picPath: {
       type: String,
@@ -70,15 +70,18 @@ const userSchema = new mongoose.Schema(
     },
     verified: {
       type: Boolean,
-      default: false
+      default: false,
+      select: false
     },
     verificationToken: {
-      type: String
+      type: String,
+      select: false
     },
     expiresAt: {
       type: Date,
       default: Date.now,
       expires: 600,
+      select: false
     },
   },
   { timestamps: true }

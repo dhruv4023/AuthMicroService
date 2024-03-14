@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import db from '../models/index.js';
 import RESPONSE from '../helpers/response.helper.js';
-import generateJWTToken, { generateVerificationToken } from '../helpers/generate_token.helper.js';
+import generateJWTToken, { generateHashWithOTPAndSecret, generateVerificationToken } from '../helpers/generate_token.helper.js';
 import { comparePassword, hashPassword } from '../helpers/bcrypt_password.helper.js';
 import isValidData from "../helpers/validation/data_validator.js";
 import { sendVerificationEmail } from "../services/verification_link.service.js";
@@ -170,20 +170,21 @@ export const changePassControl = async (req, res) => {
   const validationErr = await isValidData(req.body, {
     email: 'required|email',
     password: 'required|password',
+    otp: "required|string"
   })
 
   if (validationErr)
     return RESPONSE.error(res, validationErr);
 
   try {
-    const { body: { email, password } } = req; // Extract email and new password from the request body
+    const { body: { email, password, otp } } = req; // Extract email and new password from the request body
 
-    const user = await Users.findOne({ email, id: req?.tokenData.userId }); // Find the user by their email
+    const user = await Users.findOne({ email, verificationToken: generateHashWithOTPAndSecret(otp) }); // Find the user by their email
 
     if (!user)
-      return RESPONSE.error(res, 1027, 400);
+      return RESPONSE.error(res, 6004, 400);
 
-    await Users.findOneAndUpdate({ email }, { $set: { password: hashPassword(password) } }); // Update the user's password in the database
+    await Users.findOneAndUpdate({ email }, { $set: { password: hashPassword(password), verificationToken: null } }); // Update the user's password in the database
 
     RESPONSE.success(res, 1010);
   } catch (error) {

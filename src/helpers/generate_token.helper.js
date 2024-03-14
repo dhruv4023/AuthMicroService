@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import config from "../config/config.js";
 
 // Function to generate a JWT token
-const generateJWTToken = ({ data, expMin = 120 }) => {
+const generateJWTToken = ({ data, expMin = 300 }) => {
   // Define the payload, including type ("typ") and expiration ("exp") claims
   const payload = {
     exp: Math.floor(Date.now() / 1000) + 60 * expMin, // Expiration in 2 hour (adjust as needed)
@@ -22,6 +22,17 @@ const generateJWTToken = ({ data, expMin = 120 }) => {
 
 export const generateVerificationToken = () => {
   return crypto.randomBytes(20).toString('hex');
+};
+
+export const generateHashWithOTPAndSecret = (otp) => {
+
+  const hmac = crypto.createHmac('sha256', config.jwt_secret);
+
+  hmac.update(otp);
+
+  const hash = hmac.digest('hex');
+
+  return hash;
 };
 
 export default generateJWTToken;

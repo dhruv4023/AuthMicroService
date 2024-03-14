@@ -11,9 +11,9 @@ Validator.register(
 Validator.register(
     'password',
     (value) => {
-        return value.length >= 5;
+        return value.length >= 6;
     },
-    'The :attribute must be at least 5 characters long.'
+    'The :attribute must be at least 6 characters long.'
 );
 
 Validator.register(

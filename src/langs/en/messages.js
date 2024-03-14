@@ -18,6 +18,12 @@ const MESSAGES = {
     5002: 'Access denied - Unauthorized',
     5003: 'Your session expired! Please log in again',
 
+    // OTP
+    6001: 'Email is required',
+    6002: 'OTP sent successfully',
+    6003: 'Failed to send OTP',
+    6004: "invalid OTP",
+
     // General error message
     9000: 'Invalid or expired token',
     9999: 'Internal Server Error',

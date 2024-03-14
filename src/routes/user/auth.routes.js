@@ -20,7 +20,7 @@ routes.post("/register", upload.single("picPath"), registerControl);
 routes.post("/login", loginControl);
 
 // Define a POST route for changing user passwords
-routes.put("/change/password", verifyTokenAndRole(['user', "admin"]), changePassControl);
+routes.post("/change/password", changePassControl);
 
 // Define a GET route to fetch user usernames
 routes.get("/get/usernames", getUserNames);
