@@ -14,7 +14,7 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" })); // Config
 app.use(morgan("common")); // Log HTTP requests
 app.use(cors({ origin: JSON.parse(config.origin_url_list) })); // Configure CORS for allowed origins
 app.get("/", (req, res) => {
-  res.send("Server is running...");
+  res.status(200).json("Authentication Server is running...");
 });
 
 // importing routes
