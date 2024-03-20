@@ -75,7 +75,7 @@ export const registerControl = async (req, res) => {
     // Send a success response
     RESPONSE.success(res, 1008);
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     // If an error occurs during registration, log the error and send a 500 Internal Server Error response
     RESPONSE.error(res, 9999, 500, error);
   }
@@ -100,7 +100,7 @@ export const verifyUserAccount = async (req, res) => {
     // Send a success response
     RESPONSE.success(res, 200, 'User verified successfully');
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     RESPONSE.error(res, 9999, 500, error);
   }
 };
