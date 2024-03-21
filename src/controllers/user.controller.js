@@ -9,11 +9,11 @@ const { Users } = db;
 
 export const getOtherUsers = async (req, res) => {
     try {
-        const { tokenData: { userId: id }, query: { page = 0, limit = 5 } } = req
+        const { tokenData: { userId }, query: { page = 0, limit = 5 } } = req
         const { startIndex } = getPaginationMetadata(req.query);
 
         // Your logic to fetch other users goes here...
-        const otherUsers = await Users.find({ _id: { $ne: id } }).skip(startIndex).limit(limit);;
+        const otherUsers = await Users.find({ _id: { $ne: userId } }).skip(startIndex).limit(limit);;
 
         const totalCount = otherUsers.length;
         const paginatedResponse = getPaginatedResponse(otherUsers, page, limit, totalCount);
@@ -25,7 +25,7 @@ export const getOtherUsers = async (req, res) => {
     }
 };
 
-// Controller function to get user information by uid (User ID or username)
+
 export const getUsers = async (req, res) => {
 
     try {
@@ -65,7 +65,7 @@ export const updateUserData = async (req, res) => {
 
         const _file = req.file; // Get the uploaded file, if any
         const {
-            tokenData: { userId: id },
+            tokenData: { userId: _id },
             body: { firstName, lastName, about, username, email }
         } = req;
 
@@ -75,7 +75,7 @@ export const updateUserData = async (req, res) => {
             pincode: req.body["location.pincode"],
         };
 
-        const user = await Users.findOne({ username, _id: id }); // Find the user by their username and id
+        const user = await Users.findOne({ username, _id });
 
         if (!user)
             return RESPONSE.error(res, 1027, 400);
@@ -98,7 +98,7 @@ export const updateUserData = async (req, res) => {
 
         // Update the user's data in the database
         await Users.findOneAndUpdate(
-            { id },
+            { _id },
             {
                 $set: {
                     firstName,
@@ -109,9 +109,10 @@ export const updateUserData = async (req, res) => {
                 },
             }
         );
-        const updatedUser = await Users.findOne({ id });
+        const updatedUser = await Users.findOne({ _id });
         RESPONSE.success(res, 1007, { user: updatedUser });
     } catch (error) {
+        console.log(error)
         // Send a 500 (Internal Server Error) response with an error message if there's an error
         RESPONSE.error(res, 9999, 500, error)
     }
