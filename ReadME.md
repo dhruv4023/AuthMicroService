@@ -28,4 +28,6 @@ git clone https://github.com/dhruv4023/AuthMicroService
 npm install
 
 # to start app
-npm start
+npm run dev
+
+```
