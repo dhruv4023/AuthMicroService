@@ -5,7 +5,7 @@ export default {
     // database details
     database: {
         db_url: process.env.DB_URL || "mongodb://127.0.0.1:27017",
-        db_name: process.env.DB_NAME,
+        db_name: process.env.DB_NAME || "AuthenticationDB",
     },
     mail: {
         sender_email: process.env.SENDER_EMAIL,
@@ -18,14 +18,14 @@ export default {
     },
     //  ssl Keys details
     certificate: {
-        privkey: process.env.SERVER_KEY || 'path to priv key',
-        fullchain: process.env.SERVER_CERT || 'path to fullchain key',
+        privkey: process.env.SERVER_KEY || "ssl/server-key.pem",
+        fullchain: process.env.SERVER_CERT || "ssl/server-cert.pem",
     },
     protocol: process.env.PROTOCOL || 'http',
-    port: process.env.APP_PORT || 8088,
-    app_base_url: process.env.APP_BASE_URL || 'http://localhost:8088/api/v1',
-    app_project_path: process.env.APP_PROJECT_PATH || 'http://localhost:4040',
+    port: process.env.APP_PORT || 5001,
+    app_base_url: process.env.APP_BASE_URL || 'http://localhost:5001/api/v1',
     node_env: process.env.NODE_ENV || 'development',
     origin_url_list: process.env.ORIGIN_URL_LIST || '[ "http://localhost:3000" ]',
     jwt_secret: process.env.JWT_SECRET,
-};
+    DEGUB: process.env.DEGUB || false,
+}; 
