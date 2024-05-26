@@ -29,7 +29,7 @@ export const registerControl = async (req, res) => {
   });
 
   if (validationErr)
-    return RESPONSE.error(res, validationErr);
+    return RESPONSE.error(res, validationErr, 400);
 
   try {
     const _file = req.file; // Get the uploaded file, if any
@@ -127,11 +127,15 @@ export const loginControl = async (req, res) => {
         : {
           $or: [{ email: uid }, { username: uid }],
         }
-      );
-
+      ).select('+verified +password');
+      
+      console.log(user)
       // If user doesn't exist, rollback the transaction and return a 400 Bad Request response
       if (!user)
         return RESPONSE.error(res, 1027, 400);
+
+      if (!user.verified)
+        return RESPONSE.error(res, 1012, 400);
 
       // If passwords don't match, rollback the transaction and return a 400 Bad Request response
       if (!comparePassword(password, user.password))
@@ -142,6 +146,7 @@ export const loginControl = async (req, res) => {
 
       // Hide the password in the user object before sending the response
       user.password = undefined;
+      user.verified = undefined;
 
       // Send a success response with the JWT token and user details
       RESPONSE.success(res, 1002, { token, user });

@@ -11,6 +11,7 @@ const MESSAGES = {
     1009: 'Usernames retrieved successfully',
     1010: "Password changed successfully!",
     1011: 'Other users fetched successfully',
+    1012: 'Verification link sent to your email address! Please verify the user than try to login',
     1027: 'User not found, please check your username/email',
 
     // Authorization messages
