@@ -129,7 +129,7 @@ export const loginControl = async (req, res) => {
         }
       ).select('+verified +password');
       
-      console.log(user)
+
       // If user doesn't exist, rollback the transaction and return a 400 Bad Request response
       if (!user)
         return RESPONSE.error(res, 1027, 400);
