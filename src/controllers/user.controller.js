@@ -54,7 +54,6 @@ export const updateUserData = async (req, res) => {
     const validationErr = await isValidData(req.body, {
         firstName: 'required|string|min:2|max:20|nameWithoutNumbers',
         lastName: 'required|string|min:2|max:20|nameWithoutNumbers',
-        username: 'required|string|min:3|max:20',
         email: 'required|email',
     })
 
@@ -65,8 +64,8 @@ export const updateUserData = async (req, res) => {
 
         const _file = req.file; // Get the uploaded file, if any
         const {
-            tokenData: { userId: _id },
-            body: { firstName, lastName, about, username, email }
+            tokenData: { userId: _id, username },
+            body: { firstName, lastName, about, email }
         } = req;
 
         const location = {
