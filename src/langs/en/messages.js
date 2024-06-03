@@ -24,6 +24,7 @@ const MESSAGES = {
     6002: 'OTP sent successfully',
     6003: 'Failed to send OTP',
     6004: "invalid OTP",
+    6005: "Email isn't registered with any account! check your email address and try again",
 
     // General error message
     9000: 'Invalid or expired token',

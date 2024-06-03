@@ -24,8 +24,11 @@ export const sendOTPController = async (req, res) => {
         // Generate OTP (e.g., a random 6-digit number)
         const otp = String(Math.floor(100000 + Math.random() * 900000));
 
-        await Users.updateOne({ email }, { $set: { verificationToken: generateHashWithOTPAndSecret(otp) } })
-
+        const updateResponse = await Users.updateOne({ email }, { $set: { verificationToken: generateHashWithOTPAndSecret(otp) } })
+        if (updateResponse.modifiedCount == 0) {
+            return RESPONSE.error(res, 6005, 404)
+        }
+        
         // Send OTP via email
         await sendEmailMail({
             recipient: email,
