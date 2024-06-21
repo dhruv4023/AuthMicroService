@@ -118,8 +118,7 @@ export const loginControl = async (req, res) => {
 
   try {
     // Extracting user login data from the request body
-    const { body: { uid, password } } = req;
-
+    const { body: { uid, password, unlimitedTokenTime } } = req;
     try {
       // Retrieve user data for the provided username or email
       const user = await Users.findOne(mongoose.isValidObjectId(uid)
@@ -142,7 +141,7 @@ export const loginControl = async (req, res) => {
         return RESPONSE.error(res, 1005, 400);
 
       // Generate a JWT token for the authenticated user
-      const token = generateJWTToken({ data: { userId: user._id, username: user.username, role: user.role } });
+      const token = generateJWTToken({ data: { userId: user._id, username: user.username, role: user.role }, shouldExpire: unlimitedTokenTime ? false : true });
 
       // Hide the password in the user object before sending the response
       user.password = undefined;
