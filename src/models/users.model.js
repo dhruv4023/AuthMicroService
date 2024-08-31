@@ -38,28 +38,27 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       select: false
     },
     picPath: {
       type: String,
-      default: "",
+      default:null,
       trim: true
     },
     location: {
       state: {
         type: String,
-        required: true,
+        // required: true,
         trim: true
       },
       city: {
         type: String,
-        required: true,
+        // required: true,
         trim: true
       },
       pincode: {
         type: Number,
-        required: true
+        // required: true
       }
     },
     role: {

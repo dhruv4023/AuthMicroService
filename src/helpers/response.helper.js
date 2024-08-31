@@ -15,7 +15,7 @@ RESPONSE.error = function (res, messageCode, statusCode = 422, error = null, dat
     var response = {};
     response.success = false;
     response.message = getMessage(messageCode);
-    statusCode = messageCode == 9999 ? 500 : statusCode;
+    statusCode = statusCode != 422 ? statusCode : messageCode == 9999 ? 500 : statusCode;
 
     if (data != null)
         response.data = data;

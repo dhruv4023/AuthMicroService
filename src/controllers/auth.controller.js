@@ -6,6 +6,7 @@ import { comparePassword, hashPassword } from '../helpers/bcrypt_password.helper
 import isValidData from "../helpers/validation/data_validator.js";
 import { sendVerificationEmail } from "../services/verification_link.service.js";
 import { uploadFile } from "../helpers/upload_file_to_cloudinary.helper.js";
+import passport from "passport";
 const { Users } = db;
 
 // Controller for user registration
@@ -127,7 +128,7 @@ export const loginControl = async (req, res) => {
           $or: [{ email: uid }, { username: uid }],
         }
       ).select('+verified +password');
-      
+
 
       // If user doesn't exist, rollback the transaction and return a 400 Bad Request response
       if (!user)
@@ -146,6 +147,11 @@ export const loginControl = async (req, res) => {
       // Hide the password in the user object before sending the response
       user.password = undefined;
       user.verified = undefined;
+
+      req.session.auth = {
+        userId: user._id,
+        token
+      };
 
       // Send a success response with the JWT token and user details
       RESPONSE.success(res, 1002, { token, user });
@@ -192,6 +198,53 @@ export const changePassControl = async (req, res) => {
 
     RESPONSE.success(res, 1010);
   } catch (error) {
+    RESPONSE.error(res, 9999, 500, error);
+  }
+};
+
+
+
+export const googleAuth = async (req, res, next) => {
+  // Dynamically build the authentication URL with additional query parameters
+  const baseurl = req.query.baseurl || "http://localhost:5001";
+  // Use `passReqToCallback` in the strategy to access this later if needed
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    state: JSON.stringify({ baseurl }) // Pass the baseurl as a state parameter
+  })(req, res, next);
+}
+
+export const logout = async (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.clearCookie('connect.sid');  // Clear the session cookie
+      res.status(200).json({ "success": true, message: "logout successfully" });
+    });
+  });
+}
+
+
+export const getSession = async (req, res) => {
+  try {
+    // if (req.isAuthenticated()) {
+    if (true) {
+      console.log(req.session.auth)
+      const { userId, token } = req.session.auth;
+      const user = await Users.findOne({ _id: userId });
+      RESPONSE.success(res, 1002, { token, user });
+    } else {
+      // If not authenticated, send a 401 Unauthorized response
+      RESPONSE.error(res, 9999, 401);
+    }
+  } catch (error) {
+    console.log(error)
     RESPONSE.error(res, 9999, 500, error);
   }
 };

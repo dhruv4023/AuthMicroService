@@ -1,13 +1,15 @@
 // Import the necessary dependencies and controllers
 import express from "express";
 import {
-  registerControl,
+  getSession,  registerControl,
   loginControl,
   getUserNames,
   changePassControl,
   verifyUserAccount,
+  logout,
+  googleAuth,
 } from "../../controllers/auth.controller.js";
-import { verifyTokenAndRole } from "../../middlewares/auth.js";
+
 import upload from "../../middlewares/file_uploader.js";
 
 // Create a new Express Router
@@ -19,6 +21,10 @@ routes.post("/register", upload.single("picPath"), registerControl);
 // Define a POST route for user login
 routes.post("/login", loginControl);
 
+// Define a POST route for user login using google
+routes.get('/google', googleAuth);
+
+
 // Define a POST route for changing user passwords
 routes.post("/change/password", changePassControl);
 
@@ -27,6 +33,11 @@ routes.get("/get/usernames", getUserNames);
 
 // Define a GET route to verify user account via the verification link
 routes.get("/verify/:token", verifyUserAccount);
+
+
+routes.get("/get/session/",getSession);
+
+routes.get("/logout", logout);
 
 // Export the router for use in other parts of the application
 export default routes;

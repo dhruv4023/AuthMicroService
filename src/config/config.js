@@ -21,11 +21,17 @@ export default {
         privkey: process.env.SERVER_KEY || "ssl/server-key.pem",
         fullchain: process.env.SERVER_CERT || "ssl/server-cert.pem",
     },
+    google: {
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+    },
+    redirect_url: process.env.REDIRECT_URL || 'http://localhost:5001',
     protocol: process.env.PROTOCOL || 'http',
     port: process.env.APP_PORT || 5001,
     app_base_url: process.env.APP_BASE_URL || 'http://localhost:5001/api/v1',
     node_env: process.env.NODE_ENV || 'development',
     origin_url_list: process.env.ORIGIN_URL_LIST || '[ "http://localhost:3000" ]',
     jwt_secret: process.env.JWT_SECRET,
+    session_secret: process.env.SESSION_SECRET || "SESSION_SECRET",
     DEGUB: process.env.DEGUB || false,
 }; 
