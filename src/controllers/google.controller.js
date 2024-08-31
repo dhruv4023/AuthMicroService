@@ -14,14 +14,14 @@ export const loginCallback = async (req, res) => {
       user = await Users.create({ email, firstName, lastName, username: email.split("@")[0], verificationToken: undefined, expiresAt: null, verified: true });
     }
 
-    // // Generate JWT token
+    // // Generate JWT token 
     const token = jwt.sign(
-      { email: user.email, id: user._id },
+      { email: user.email, username: user.username, role: user.role, id: user._id },
       process.env.JWT_SECRET
     );
 
 
-    req.session.auth = {
+    req.session.user = {
       userId: user._id,
       token
     };
