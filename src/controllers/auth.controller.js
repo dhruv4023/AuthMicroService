@@ -148,7 +148,7 @@ export const loginControl = async (req, res) => {
       user.password = undefined;
       user.verified = undefined;
 
-      req.session.auth = {
+      req.session.user = {
         userId: user._id,
         token
       };
@@ -233,10 +233,8 @@ export const logout = async (req, res, next) => {
 
 export const getSession = async (req, res) => {
   try {
-    // if (req.isAuthenticated()) {
-    if (true) {
-      console.log(req.session.auth)
-      const { userId, token } = req.session.auth;
+    if (req.session.user) {
+      const { userId, token } = req.session.user;
       const user = await Users.findOne({ _id: userId });
       RESPONSE.success(res, 1002, { token, user });
     } else {
