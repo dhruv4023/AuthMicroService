@@ -10,7 +10,7 @@ export const sendEmailMail = async ({ recipient, subject, body }) => {
       pass: config.mail.sender_password, // Use the sender's email password from environment variables
     },
   });
-  
+
   // Define email options including sender, recipient, subject, and text
   const mailOptions = {
     from: process.env.SENDER_EMAIL, // Sender's email address
