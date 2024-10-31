@@ -5,13 +5,21 @@ const { Users } = db;
 export const loginCallback = async (req, res) => {
   try {
     const { baseurl } = JSON.parse(req.query.state);
-
     const { email, firstName, lastName } = req.user;
+
     // Check if the user already exists
     let user = await Users.findOne({ email });
     if (!user) {
       // Create a new user if they do not exist
-      user = await Users.create({ email, firstName, lastName, username: email.split("@")[0], verificationToken: undefined, expiresAt: null, verified: true });
+      user = await Users.create({
+        email,
+        firstName,
+        lastName,
+        username: email.split("@")[0],
+        verificationToken: undefined,
+        expiresAt: null,
+        verified: true,
+      });
     }
 
     // // Generate JWT token 

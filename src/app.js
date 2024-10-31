@@ -42,6 +42,7 @@ app.use(
     store: MongoStore.create({
       dbName: config.database.db_name,
       mongoUrl: config.database.db_url,
+      dbName: config.database.db_name,
       collectionName: 'sessions'
     }),
     cookie: {
