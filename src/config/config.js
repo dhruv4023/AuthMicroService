@@ -33,5 +33,6 @@ export default {
     origin_url_list: process.env.ORIGIN_URL_LIST || '[ "http://localhost:3000" ]',
     jwt_secret: process.env.JWT_SECRET,
     session_secret: process.env.SESSION_SECRET || "SESSION_SECRET",
+    crypto_secret: process.env.CRYPTO_SECRET || "CRYPTO_SECRET",
     DEGUB: process.env.DEGUB || false,
 }; 

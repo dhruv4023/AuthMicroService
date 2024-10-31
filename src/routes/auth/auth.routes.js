@@ -1,10 +1,10 @@
 // Import the necessary dependencies and controllers
 import express from "express";
 import {
-  getSession,  registerControl,
+  getSession, registerControl,
   loginControl,
-  getUserNames,
-  changePassControl,
+  checkUsernameAvalibility,
+  changePasswordController,
   verifyUserAccount,
   logout,
   googleAuth,
@@ -26,16 +26,16 @@ routes.get('/google', googleAuth);
 
 
 // Define a POST route for changing user passwords
-routes.post("/change/password", changePassControl);
+routes.post("/change/password", changePasswordController);
 
 // Define a GET route to fetch user usernames
-routes.get("/get/usernames", getUserNames);
+routes.get("/is-available/username/:username", checkUsernameAvalibility);
 
 // Define a GET route to verify user account via the verification link
 routes.get("/verify/:token", verifyUserAccount);
 
 
-routes.get("/get/session/",getSession);
+routes.get("/get/session", getSession);
 
 routes.get("/logout", logout);
 

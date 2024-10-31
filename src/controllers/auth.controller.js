@@ -24,9 +24,10 @@ export const registerControl = async (req, res) => {
     username: 'required|string',
     email: 'required|email',
     password: 'required|password',
-    state: 'required|string',
-    city: 'required|string',
-    pincode: 'required|sixDigitNumber'
+    about: 'string',
+    state: 'string',
+    city: 'string',
+    pincode: 'sixDigitNumber'
   });
 
   if (validationErr)
@@ -165,17 +166,19 @@ export const loginControl = async (req, res) => {
 };
 
 // Controller function to get user names
-export const getUserNames = async (req, res) => {
+export const checkUsernameAvalibility = async (req, res) => {
   try {
-    const userNames = await Users.distinct("username");
-    RESPONSE.success(res, 1009, userNames);
+    const { params: { username } } = req;
+    const isAvailable = await Users.findOne({ username: username });
+    // console.log(isAvailable,isAvailable==undefined)
+    RESPONSE.success(res, 1009, { isAvailable: isAvailable == undefined });
   } catch (error) {
     RESPONSE.error(res, 9999, 500, error);
   }
 };
 
 // Controller function to change user password
-export const changePassControl = async (req, res) => {
+export const changePasswordController = async (req, res) => {
 
   const validationErr = await isValidData(req.body, {
     email: 'required|email',
