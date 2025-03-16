@@ -17,7 +17,8 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "streamifier": "^0.1.1",
-    "validatorjs": "^3.22.1"
+    "validatorjs": "^3.22.1",
+    "xtend": "^4.0.2"
   },
   "name": "server",
   "version": "1.0.0",

@@ -17,8 +17,22 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(helmet()); // Enhance security by setting various HTTP headers
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" })); // Configure CORS policy
 app.use(morgan("common")); // Log HTTP requests
-app.use(cors({ origin: JSON.parse(config.origin_url_list) })); // Configure CORS for allowed origins
 
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = JSON.parse(config.origin_url_list);
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  allowedHeaders: ["Authorization", "Content-Type"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+};
+
+app.use(cors(corsOptions));
 
 app.use(
   session({
@@ -26,12 +40,15 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
+      dbName: config.database.db_name,
       mongoUrl: config.database.db_url,
       collectionName: 'sessions'
     }),
     cookie: {
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 1000 * 60 * 60 * 24,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 2,
     },
   })
 );
